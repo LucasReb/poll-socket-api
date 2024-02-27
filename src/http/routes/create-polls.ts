@@ -11,6 +11,10 @@ export async function createPoll(app: FastifyInstance) {
     
         const { title, options } = createPollBody.parse(request.body);
     
+        if(options.length < 2) { 
+            return reply.status(400).send("A quantidade de opções é inválida!")
+        } 
+
         const poll = await prisma.poll.create({
             data: {
                 title,
@@ -24,7 +28,7 @@ export async function createPoll(app: FastifyInstance) {
             }
         })
 
-
         return reply.status(201).send({ pollId: poll.id})
+
     })
 }
